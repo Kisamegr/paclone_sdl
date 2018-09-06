@@ -1,0 +1,13 @@
+Starbreeze Work Test -- Gameplay Programmer
+============================================
+
+The Task
+--------
+
+The task is to create Whakman, a simple Pacman like game using object oriented C++ and the supplied SBZWhakman library.
+You can choose to do a straight up Pacman clone or a Pacman game with some kind of twist.
+Choose whatever is more interesting to you. To help you get started, take a look at example.cpp.
+
+Submit the finished code to us, together with a short note.
+In the note you should tell us what we should look for in your submission,
+what you are the most proud of in the implementation and what you wanted to have done better.
