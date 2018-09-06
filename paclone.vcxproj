@@ -19,10 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="actor.h" />
+    <ClInclude Include="sbzlibraryscope.h" />
     <ClInclude Include="sbzwhakman.h" />
+    <ClInclude Include="tile.h" />
+    <ClInclude Include="whakman.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="actor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sbzlibraryscope.cpp" />
+    <ClCompile Include="tile.cpp" />
+    <ClCompile Include="whakman.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
