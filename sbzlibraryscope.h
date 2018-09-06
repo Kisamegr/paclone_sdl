@@ -4,12 +4,12 @@
 
 class SBZLibraryScope {
 public:
-    typedef ISBZLibrary*(*CreateLibraryFunc)();
+  typedef ISBZLibrary*(*CreateLibraryFunc)();
 
-    SBZLibraryScope();
-    ~SBZLibraryScope();
-    ISBZLibrary	*library() const;
+  SBZLibraryScope();
+  ~SBZLibraryScope();
+  ISBZLibrary	*library() const;
 private:
-    HMODULE			_dll;
-    ISBZLibrary*	_library;
+  HMODULE			_dll;
+  ISBZLibrary*	_library;
 };
