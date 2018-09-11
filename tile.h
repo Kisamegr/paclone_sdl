@@ -8,6 +8,7 @@ private:
   float m_rot;
 
 public:
+  Tile() = default;
   Tile(int image, int x, int y, float rot = 0.0f);
   int image();
   int x();

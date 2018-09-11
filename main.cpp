@@ -5,36 +5,59 @@
 #include "SBZLibraryScope.h"
 #include "tile.h"
 #include "whakman.h"
+#include "map.h"
 
+#define SIZE 5
+
+//int g_map[10][10] =
+//{
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+//};
+
+//int g_map[SIZE][SIZE] =
+//{
+//  {1, 1, 1, 1, 0},
+//  {0, 0, 1, 1, 0},
+//  {0, 0, 1, 0, 1},
+//  {0, 0, 1, 1, 1},
+//  {0, 0, 0, 0, 1}
+//};
+
+int g_map[SIZE][SIZE] =
+{
+  {0, 1, 0, 0, 0},
+  {0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 1},
+  {0, 0, 0, 1, 0},
+  {0, 1, 1, 1, 1}
+};
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int nshow) {
-  SBZLibraryScope library_scope;
-
-  auto *lib = library_scope.library();
-  lib->init(640, 640);
+  auto *lib = SBZLibraryScope::shared()->library();
+  lib->init(10 * 64, 10 * 64);
 
   IFont *font = lib->load_font("fonts/LondonBetween.ttf", 30);
 
   std::vector<IImage*> images;
-  images.push_back(lib->load_image("images/wall_cross.png"));
-  images.push_back(lib->load_image("images/wall_straight.png"));
 
-  std::vector<Tile> tiles;
-  for (int y = 0; y < 10; ++y) {
-    for (int x = 0; x < 10; ++x) {
-      bool xtile = (y % 2) == 0;
-      bool ytile = (x % 3) == 0;
-      if (xtile && ytile) {
-        tiles.push_back(Tile(0, x * 64, y * 64, 0));
-      }
-      else if (xtile) {
-        tiles.push_back(Tile(1, x * 64, y * 64, 0));
-      }
-      else if (ytile) {
-        tiles.push_back(Tile(1, x * 64, y * 64, 90));
-      }
-    }
-  }
+  Map map(SIZE, SIZE);
+
+
+  for (int i = 0; i < SIZE; i++)
+    for (int j = 0; j < SIZE; j++)
+      map.setValue(i, j, g_map[i][j]);
+
+  map.generateTiles();
+
 
   std::vector<Actor*> actors;
   actors.push_back(new Whakman(lib));
@@ -49,9 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int 
       actor->update(dt);
     }
 
-    for (auto &tile : tiles) {
-      images[tile.image]->draw(tile.x, tile.y, tile.rot);
-    }
+    map.draw();
 
     for (auto *actor : actors) {
       actor->draw();

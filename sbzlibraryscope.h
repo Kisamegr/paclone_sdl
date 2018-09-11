@@ -4,6 +4,7 @@
 
 class SBZLibraryScope {
 public:
+  static SBZLibraryScope *shared();
   typedef ISBZLibrary*(*CreateLibraryFunc)();
 
   SBZLibraryScope();

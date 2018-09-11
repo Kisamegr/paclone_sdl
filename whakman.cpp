@@ -1,42 +1,31 @@
 #include "whakman.h"
 
-inline Whakman::Whakman(ISBZLibrary * lib)
-  :_lib(lib)
-  , _x(0)
-  , _y(0)
-  , _timer(0)
-  , _frame(0)
+Whakman::Whakman(ISBZLibrary * lib)
+  : Actor(lib), m_animationFlipTime(0.3)
 {
-  _images.push_back(lib->load_image("images/whakman_01.png"));
-  _images.push_back(lib->load_image("images/whakman_02.png"));
+  m_speed = 120;
+
+  m_images.push_back(lib->load_image("images/whakman_01.png"));
+  m_images.push_back(lib->load_image("images/whakman_02.png"));  
 }
 
-inline Whakman::~Whakman() {
-  for (auto image : _images) {
+Whakman::~Whakman() {
+  for (auto image : m_images) {
     image->destroy();
   }
 }
 
-inline void Whakman::update(float dt) {
-  update_animation(dt);
-  update_movement(dt);
-}
-
-inline void Whakman::draw() {
-  _images[_frame]->draw(static_cast<int>(_x), static_cast<int>(_y));
-}
-
-inline void Whakman::update_animation(float dt) {
-  _timer += dt;
-  if (_timer > k_WHAKMAN_ANIMATION_FLIP_TIME) {
-    _timer = 0;
-    _frame = (_frame + 1) % _images.size();
+void Whakman::update_animation(float dt) {
+  m_timer += dt;
+  if (m_timer > m_animationFlipTime) {
+    m_timer = 0;
+    m_frame = (m_frame + 1) % m_images.size();
   }
 }
 
-inline void Whakman::update_movement(float dt) {
+void Whakman::update_movement(float dt) {
   int keys[8];
-  int nr_pressed = _lib->pressed_keys(keys, 8);
+  int nr_pressed = m_lib->pressed_keys(keys, 8);
   if (nr_pressed > 0) {
     float dx = 0, dy = 0;
     for (int i = 0; i < nr_pressed; ++i) {
@@ -44,24 +33,30 @@ inline void Whakman::update_movement(float dt) {
       case 'w':
       case ISBZLibrary::KC_UP:
         dy = -1;
+        m_face = UP;
         break;
       case 'a':
       case ISBZLibrary::KC_LEFT:
         dx = -1;
+        m_face = LEFT;
         break;
       case 's':
       case ISBZLibrary::KC_DOWN:
         dy = 1;
+        m_face = DOWN;
         break;
       case 'd':
       case ISBZLibrary::KC_RIGHT:
         dx = 1;
+        m_face = RIGHT;
         break;
       }
     }
 
-    _x += k_WHAKMAN_SPEED * dx * dt;
-    _y += k_WHAKMAN_SPEED * dy * dt;
+
+
+    m_x += m_speed * dx * dt;
+    m_y += m_speed * dy * dt;
   }
 
 }

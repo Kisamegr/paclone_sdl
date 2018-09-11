@@ -1,5 +1,11 @@
 #include "sbzlibraryscope.h"
 
+SBZLibraryScope *SBZLibraryScope::shared()
+{
+  static SBZLibraryScope instance;
+  return &instance;
+}
+
 SBZLibraryScope::SBZLibraryScope()
   : _dll(nullptr)
   , _library(nullptr)
