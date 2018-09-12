@@ -121,3 +121,11 @@ float Actor::getX() {
 float Actor::getY() {
   return m_y;
 }
+
+int Actor::get_x_coord() {
+  return m_xCoord;
+}
+
+int Actor::get_y_coord() {
+  return m_yCoord;
+}

@@ -31,4 +31,6 @@ public:
   void setPosition(const float &x, const float &y);
   float getX();
   float getY();
+  int get_x_coord();
+  int get_y_coord();
 };

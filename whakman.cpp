@@ -48,6 +48,4 @@ void Whakman::update_movement(const float &dt, Map *map) {
   }
 
   Actor::update_movement(dt, map);
-
-  map->eatFood(m_xCoord, m_yCoord);
 }

@@ -5,7 +5,8 @@
 
 #define TILE_SIZE 64
 
-Map::Map(const int &width, const int &height) : m_width(width), m_height(height) {
+Map::Map(const int &width, const int &height) 
+  : m_width(width), m_height(height), m_food_count(0) {
   m_map = new int*[height];
 
   for (int x = 0; x < width; x++) {
@@ -108,18 +109,29 @@ void Map::generateTiles() {
 }
 
 void Map::generateFood() {
+  m_food_count = 0;
   for (int x = 0; x < m_width; x++) {
     for (int y = 0; y < m_height; y++) {
-      if (m_map[x][y] == SPACE_EMPTY)
+      if (m_map[x][y] == SPACE_EMPTY) {
         m_map[x][y] = SPACE_FOOD;
+        m_food_count++;
+      }
     }
   }
 }
 
-void Map::eatFood(const int & xCoord, const int & yCoord) {
+bool Map::checkEatingFood(const int & xCoord, const int & yCoord) {
   if (getValue(xCoord, yCoord) == SPACE_FOOD) {
     setValue(xCoord, yCoord, SPACE_EMPTY);
+    m_food_count--;
+    return true;
   }
+
+  return false;
+}
+
+int Map::get_food_count() {
+  return m_food_count;
 }
 
 void Map::wallFromNeighbors(const int &x, const int &y, Wall &wall, int &rot) {

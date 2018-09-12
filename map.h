@@ -36,11 +36,14 @@ public:
   void generateTiles();
   void generateFood();
 
-  void eatFood(const int &xCoord, const int &yCoord);
+  bool checkEatingFood(const int &xCoord, const int &yCoord);
+  int get_food_count();
 
 private:
   int m_width;
   int m_height;
+
+  int m_food_count;
 
   int **m_map;
 

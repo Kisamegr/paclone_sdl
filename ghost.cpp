@@ -4,7 +4,7 @@
 
 Ghost::Ghost(ISBZLibrary * lib, Actor *player) : Actor(lib), m_player(player)
 {
-  m_speed = 20;
+  m_speed = 100;
 
   m_images.push_back(lib->load_image("images/ghost_01.png"));
   m_images.push_back(lib->load_image("images/ghost_02.png"));
