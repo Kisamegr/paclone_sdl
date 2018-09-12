@@ -14,22 +14,21 @@ Ghost::Ghost(ISBZLibrary * lib, Actor *player) : Actor(lib), m_player(player)
 
 
 
-void Ghost::update_animation(const float & dt) {
+void Ghost::update_animation(const float &dt) {
 }
 
 
-void Ghost::update_movement(const float & dt, Map & map) {
+void Ghost::update_movement(const float &dt, Map *map) {
 
   float x = m_x / 64.0;
   float y = m_y / 64.0;
 
-  int xTile = round(x);
-  int yTile = round(y);
+  m_xCoord = round(x);
+  m_yCoord = round(y);
 
-  if (abs(x - xTile) == 0 || abs(y - yTile) == 0) {
+  if (abs(x - m_xCoord) == 0 || abs(y - m_yCoord) == 0) {
     float dx = m_player->getX() - m_x;
     float dy = m_player->getY() - m_y;
-
 
     std::vector<Direction> priorityDirections;
     Direction oppositeDirection = (Direction)((m_direction + 2) % 4);
@@ -80,7 +79,7 @@ void Ghost::update_movement(const float & dt, Map & map) {
       if (i != 3 && currentDirection == oppositeDirection)
         continue;
 
-      if (map.getValueDirection(currentDirection, xTile, yTile) != Map::SPACE_WALL) {
+      if (map->getValueDirection(currentDirection, m_xCoord, m_yCoord) != Map::SPACE_WALL) {
         m_lastInput = currentDirection;
         break;
       }

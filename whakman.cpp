@@ -18,7 +18,7 @@ void Whakman::update_animation(const float &dt) {
   }
 }
 
-void Whakman::update_movement(const float &dt, Map &map) {
+void Whakman::update_movement(const float &dt, Map *map) {
   int keys[8];
   int nr_pressed = m_lib->pressed_keys(keys, 8);
   if (nr_pressed > 0) {
@@ -49,5 +49,5 @@ void Whakman::update_movement(const float &dt, Map &map) {
 
   Actor::update_movement(dt, map);
 
-  map.eatFood(m_xTile, m_yTile);
+  map->eatFood(m_xCoord, m_yCoord);
 }
