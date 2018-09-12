@@ -6,44 +6,32 @@
 #include "tile.h"
 #include "whakman.h"
 #include "map.h"
+#include "ghost.h"
 
-#define SIZE 5
+#define SIZE 13
 
-//int g_map[10][10] =
-//{
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-//};
-
-//int g_map[SIZE][SIZE] =
-//{
-//  {1, 1, 1, 1, 0},
-//  {0, 0, 1, 1, 0},
-//  {0, 0, 1, 0, 1},
-//  {0, 0, 1, 1, 1},
-//  {0, 0, 0, 0, 1}
-//};
-
-int g_map[SIZE][SIZE] =
+int g_map[13][13] =
 {
-  {0, 1, 0, 0, 0},
-  {0, 1, 1, 1, 0},
-  {1, 1, 1, 1, 1},
-  {0, 1, 1, 1, 0},
-  {0, 1, 1, 1, 0}
+  {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+  {0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+  {0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0},
+  {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+  {0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0},
+  {0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0},
+  {1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1},
+  {1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1},
+  {1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1},
+  {0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+  {0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0},
+  {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+  {0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0}
 };
+
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int nshow) {
   auto *lib = SBZLibraryScope::shared()->library();
-  lib->init(10 * 64, 10 * 64);
+  lib->init(SIZE * 64, SIZE * 64);
 
   IFont *font = lib->load_font("fonts/LondonBetween.ttf", 30);
 
@@ -58,9 +46,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int 
 
   map.generateTiles();
 
+  Whakman *player = new Whakman(lib);
 
   std::vector<Actor*> actors;
-  actors.push_back(new Whakman(lib));
+  actors.push_back(player);
+  actors.push_back(new Ghost(lib, player));
+
+  
 
   float prev_time = lib->time();
   while (lib->update()) {
@@ -69,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int 
     prev_time = cur_time;
 
     for (auto *actor : actors) {
-      actor->update(dt);
+      actor->update(dt, map);
     }
 
     map.draw();

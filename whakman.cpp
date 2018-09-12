@@ -6,16 +6,11 @@ Whakman::Whakman(ISBZLibrary * lib)
   m_speed = 120;
 
   m_images.push_back(lib->load_image("images/whakman_01.png"));
-  m_images.push_back(lib->load_image("images/whakman_02.png"));  
+  m_images.push_back(lib->load_image("images/whakman_02.png"));
 }
 
-Whakman::~Whakman() {
-  for (auto image : m_images) {
-    image->destroy();
-  }
-}
 
-void Whakman::update_animation(float dt) {
+void Whakman::update_animation(const float &dt) {
   m_timer += dt;
   if (m_timer > m_animationFlipTime) {
     m_timer = 0;
@@ -23,7 +18,7 @@ void Whakman::update_animation(float dt) {
   }
 }
 
-void Whakman::update_movement(float dt) {
+void Whakman::update_movement(const float &dt, const Map &map) {
   int keys[8];
   int nr_pressed = m_lib->pressed_keys(keys, 8);
   if (nr_pressed > 0) {
@@ -32,31 +27,25 @@ void Whakman::update_movement(float dt) {
       switch (keys[i]) {
       case 'w':
       case ISBZLibrary::KC_UP:
-        dy = -1;
-        m_face = UP;
+        m_lastInput = UP;
         break;
       case 'a':
       case ISBZLibrary::KC_LEFT:
-        dx = -1;
-        m_face = LEFT;
+        m_lastInput = LEFT;
         break;
       case 's':
       case ISBZLibrary::KC_DOWN:
-        dy = 1;
-        m_face = DOWN;
+        m_lastInput = DOWN;
         break;
       case 'd':
       case ISBZLibrary::KC_RIGHT:
-        dx = 1;
-        m_face = RIGHT;
+        m_lastInput = RIGHT;
         break;
       }
     }
 
 
-
-    m_x += m_speed * dx * dt;
-    m_y += m_speed * dy * dt;
   }
 
+  Actor::update_movement(dt, map);
 }

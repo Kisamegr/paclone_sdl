@@ -1,5 +1,9 @@
 #pragma once
 
+enum Direction {
+  RIGHT, DOWN, LEFT, UP
+};
+
 struct IImage {
   enum FlipMode {
     NONE = 0,

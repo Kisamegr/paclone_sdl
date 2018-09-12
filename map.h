@@ -21,12 +21,17 @@ public:
 
   void draw();
 
-  int getValue(const int &x, const int &y);
-  void setValue(const int &x, const int &y, const int &value);
+
+  void setValue(const int &xCoord, const int &yCoord, const int &value);
+  int getValue(const int &xCoord, const int &yCoord) const;
+  int getValuePosition(const float &x, const float &y) const;
+  int getValueDirection(const Direction &direction, const int &xCoord, const int &yCoord) const;
+
+
 
   void generateTiles();
 
-  void wallFromNeighbors(const int &x, const int &y, Wall &wall, int &rot);
+  bool reachedCell(const int &x, const int &y) const;
 
 private:
   int m_width;
@@ -37,6 +42,7 @@ private:
 
   std::vector<IImage*> wallImages;
 
+  void wallFromNeighbors(const int &xCoord, const int &yCoord, Wall &wall, int &rot);
 
 };
 

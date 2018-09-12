@@ -3,6 +3,8 @@
 #include <iostream>
 #include <numeric>
 
+#define TILE_SIZE 64
+
 Map::Map(const int &width, const int &height) : m_width(width), m_height(height) {
   m_map = new int*[height];
 
@@ -42,9 +44,9 @@ void Map::draw() {
 
 }
 
-int Map::getValue(const int &x, const int &y) {
+int Map::getValue(const int &x, const int &y) const {
   if (m_map != nullptr) {
-    if (x > 0 && x < m_width && y >= 0 && y < m_height) {
+    if (x >= 0 && x < m_width && y >= 0 && y < m_height) {
       if (m_map[x] != nullptr) {
         return m_map[x][y];
       }
@@ -68,6 +70,29 @@ void Map::setValue(const int &x, const int &y, const int &value) {
   }
 }
 
+int Map::getValuePosition(const float & x, const float & y) const
+{
+  int xTile = round(x) / TILE_SIZE;
+  int yTile = round(y) / TILE_SIZE;
+
+  return getValue(xTile, yTile);
+}
+
+int Map::getValueDirection(const Direction &direction, const int &xCoord, const int &yCoord) const {
+  switch (direction)
+  {
+  case RIGHT:
+    return getValue(xCoord + 1, yCoord);
+  case DOWN:
+    return getValue(xCoord, yCoord + 1);
+  case LEFT:
+    return getValue(xCoord - 1, yCoord);
+  case UP:
+    return getValue(xCoord, yCoord - 1);
+  }
+}
+
+
 void Map::generateTiles() {
   m_tiles = new Tile*[m_width];
   Wall wall;
@@ -83,10 +108,17 @@ void Map::generateTiles() {
       else
         wallFromNeighbors(x, y, wall, rot);
       
-      m_tiles[x][y] = Tile(wall, x * 64, y * 64, rot);
-      //m_tiles[x][y] = Tile(m_map[x][y], x * 64, y * 64, 0);
+      m_tiles[x][y] = Tile(wall, x * TILE_SIZE, y * TILE_SIZE, rot);
     }
   }
+}
+
+bool Map::reachedCell(const int & x, const int & y) const
+{
+  float xCoord = (float) x / TILE_SIZE;
+  float yCoord = (float) y / TILE_SIZE;
+
+  return abs(xCoord-floor(xCoord)) && yCoord == floor(yCoord);
 }
 
 void Map::wallFromNeighbors(const int &x, const int &y, Wall &wall, int &rot) {
