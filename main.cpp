@@ -9,10 +9,12 @@
 #include "ghost.h"
 
 #define SIZE 13
+#define X_OFFSET 0
+#define Y_OFFSET 50
 
 int g_map[13][13] =
 {
-  {0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0},
   {0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0},
   {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
@@ -31,7 +33,11 @@ int g_map[13][13] =
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int nshow) {
   auto *lib = SBZLibraryScope::shared()->library();
-  lib->init(SIZE * 64, SIZE * 64);
+
+  int screen_size_x = SIZE * 64 + X_OFFSET;
+  int screen_size_y = SIZE * 64 + Y_OFFSET;
+
+  lib->init(screen_size_x, screen_size_y);
 
   IFont *font = lib->load_font("fonts/LondonBetween.ttf", 30);
 
@@ -42,9 +48,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int 
 
   for (int i = 0; i < SIZE; i++)
     for (int j = 0; j < SIZE; j++)
-      map.setValue(i, j, g_map[j][i]);
+      map.setValue(i, j, (Map::Space)g_map[j][i]);
 
   map.generateTiles();
+  map.generateFood();
 
   Whakman *player = new Whakman(lib);
 
@@ -64,13 +71,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmd, int 
       actor->update(dt, map);
     }
 
-    map.draw();
+    map.draw(X_OFFSET, Y_OFFSET);
 
     for (auto *actor : actors) {
-      actor->draw();
+      actor->draw(X_OFFSET, Y_OFFSET);
     }
 
-    font->draw(0, 640 - 30, "Score: 0", IFont::Color(255, 0, 0, 0));
+    font->draw(screen_size_x/2 - 50, 10, "Score: 0", IFont::Color(255, 0, 0, 0));
   }
 
   for (auto actor : actors) {

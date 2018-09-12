@@ -11,7 +11,7 @@ public:
 
 protected:
   void update_animation(const float &dt) override;
-  void update_movement(const float &dt, const Map &map) override;
+  void update_movement(const float &dt, Map &map) override;
 
 
 

@@ -4,7 +4,7 @@
 
 Ghost::Ghost(ISBZLibrary * lib, Actor *player) : Actor(lib), m_player(player)
 {
-  m_speed = 80;
+  m_speed = 20;
 
   m_images.push_back(lib->load_image("images/ghost_01.png"));
   m_images.push_back(lib->load_image("images/ghost_02.png"));
@@ -18,14 +18,15 @@ void Ghost::update_animation(const float & dt) {
 }
 
 
-void Ghost::update_movement(const float & dt, const Map & map) {
+void Ghost::update_movement(const float & dt, Map & map) {
 
   float x = m_x / 64.0;
   float y = m_y / 64.0;
 
   int xTile = round(x);
   int yTile = round(y);
-  
+
+  if (abs(x - xTile) == 0 || abs(y - yTile) == 0) {
     float dx = m_player->getX() - m_x;
     float dy = m_player->getY() - m_y;
 
@@ -79,16 +80,18 @@ void Ghost::update_movement(const float & dt, const Map & map) {
       if (i != 3 && currentDirection == oppositeDirection)
         continue;
 
-      if (map.getValueDirection(currentDirection, xTile, yTile) == 0) {
+      if (map.getValueDirection(currentDirection, xTile, yTile) != Map::SPACE_WALL) {
         m_lastInput = currentDirection;
         break;
       }
 
     }
 
+  }
+
   Actor::update_movement(dt, map);
 }
 
-void Ghost::draw() {
-  m_images[m_frame]->draw(static_cast<int>(m_x), static_cast<int>(m_y));
+void Ghost::draw(const float &x_offset, const float &y_offset) {
+  m_images[m_frame]->draw(static_cast<int>(m_x + x_offset), static_cast<int>(m_y + y_offset));
 }

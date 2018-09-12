@@ -6,6 +6,12 @@
 
 class Map {
 public:
+  enum Space {
+    SPACE_EMPTY, 
+    SPACE_WALL,
+    SPACE_FOOD
+  };
+
   enum Wall {
     WALL_CROSS,
     WALL_END,
@@ -19,28 +25,28 @@ public:
   Map(const int &width, const int &height);
   ~Map();
 
-  void draw();
+  void draw(const float &x_offset, const float &y_offset);
 
 
-  void setValue(const int &xCoord, const int &yCoord, const int &value);
-  int getValue(const int &xCoord, const int &yCoord) const;
-  int getValuePosition(const float &x, const float &y) const;
-  int getValueDirection(const Direction &direction, const int &xCoord, const int &yCoord) const;
-
-
+  void setValue(const int &xCoord, const int &yCoord, const Space &value);
+  Space getValue(const int &xCoord, const int &yCoord) const;
+  Space getValuePosition(const float &x, const float &y) const;
+  Space getValueDirection(const Direction &direction, const int &xCoord, const int &yCoord) const;
 
   void generateTiles();
+  void generateFood();
 
-  bool reachedCell(const int &x, const int &y) const;
+  void eatFood(const int &xCoord, const int &yCoord);
 
 private:
   int m_width;
   int m_height;
 
   int **m_map;
-  Tile **m_tiles;
 
-  std::vector<IImage*> wallImages;
+  std::vector<Tile> m_wallTiles;
+  std::vector<IImage*> m_wallImages;
+  IImage *m_foodImage;
 
   void wallFromNeighbors(const int &xCoord, const int &yCoord, Wall &wall, int &rot);
 

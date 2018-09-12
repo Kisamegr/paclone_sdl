@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="ghost.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="sbzlibraryscope.h" />
@@ -29,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="actor.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="ghost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
