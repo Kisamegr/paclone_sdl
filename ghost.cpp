@@ -4,7 +4,7 @@
 
 Ghost::Ghost(const float &x, const float &y, Actor *player)
   : Actor(x, y), m_player(player) {
-  m_speed = 100;
+  m_speed = 90;
   m_images.push_back(SBZLibraryScope::shared()->library()->load_image("images/ghost_01.png"));
   m_images.push_back(SBZLibraryScope::shared()->library()->load_image("images/ghost_02.png"));
 }
@@ -18,8 +18,8 @@ void Ghost::update_movement(const float &dt, Map *map) {
   float y = m_y / map->tile_size();
 
   // Calculate the new coords
-  m_x_coord = round(x);
-  m_y_coord = round(y);
+  m_x_coord = static_cast<int>(round(x));
+  m_y_coord = static_cast<int>(round(y));
 
   // If the actor has reached a cell, find the next move
   if (abs(x - m_x_coord) == 0 || abs(y - m_y_coord) == 0) {

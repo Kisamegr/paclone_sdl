@@ -9,7 +9,7 @@ private:
   int	  m_image; // The saved image index (the creator should have a list of images)
   int	  m_x;     // The x pixel position 
   int   m_y;     // The y pixel position
-  float m_rot;   // The rotation
+  float m_rot;   // The rotation in degrees
 
 public:
   Tile() = default;

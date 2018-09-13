@@ -1,7 +1,7 @@
 #include "whakman.h"
 
 Whakman::Whakman(const float &x, const float &y)
-  : Actor(x, y), m_animationFlipTime(0.3)
+  : Actor(x, y), m_animationFlipTime(0.3f)
 {
   m_speed = 120;
 

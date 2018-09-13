@@ -74,6 +74,8 @@ public:
   bool check_eating_food(const int &x_coord, const int &y_coord);
 
   // Basic getters
+  int width() const;
+  int height() const;
   int food_count() const;
   int tile_size() const;
 };

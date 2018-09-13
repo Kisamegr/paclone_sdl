@@ -11,6 +11,8 @@ Actor::Actor(const float &x, const float &y)
   , m_timer(0)
   , m_frame(0)
   , m_input_direction(RIGHT)
+  , m_initial_x(x)
+  , m_initial_y(y)
 {
 
 }
@@ -117,6 +119,18 @@ void Actor::draw(const float &x_offset, const float &y_offset) {
 
   // Draw the current frame based on the rotation and flip mode
   m_images[m_frame]->draw(static_cast<int>(m_x + x_offset), static_cast<int>(m_y + y_offset), rotation, flip);
+}
+
+void Actor::reset() {
+  // Reset the pixel position
+  m_x = m_initial_x;
+  m_y = m_initial_y;
+  // Reset the directions
+  m_current_direction = RIGHT;
+  m_input_direction = RIGHT;
+  // Reset the animation variables
+  m_timer = 0;
+  m_frame = 0;
 }
 
 void Actor::setPosition(const float & x, const float & y) {

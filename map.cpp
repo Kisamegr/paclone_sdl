@@ -38,14 +38,20 @@ Map::~Map() {
 void Map::draw(const float &x_offset, const float &y_offset) const {
   // Draw the walls
   for (auto tile : m_wall_tiles) {
-    m_wall_images[tile.image()]->draw(tile.x() + x_offset, tile.y() + y_offset, tile.rot());
+    m_wall_images[tile.image()]->draw(
+      static_cast<int>(round(tile.x() + x_offset)),
+      static_cast<int>(round(tile.y() + y_offset)),
+      tile.rot());
   }
 
   // Draw the food
   for (int x = 0; x < m_width; x++) {
     for (int y = 0; y < m_height; y++) {
       if (m_map[x][y] == SPACE_FOOD)
-        m_food_image->draw(x*m_tile_size + x_offset, y*m_tile_size + y_offset, 0);
+        m_food_image->draw(
+          static_cast<int>(round(x*m_tile_size + x_offset)),
+          static_cast<int>(round(y*m_tile_size + y_offset)),
+          0);
     }
   }
 
@@ -74,8 +80,8 @@ void Map::set_value(const int &x, const int &y, const Map::Space &value) {
 }
 
 Map::Space Map::get_value_position(const float &x, const float &y) const {
-  int xTile = round(x) / m_tile_size;
-  int yTile = round(y) / m_tile_size;
+  int xTile = static_cast<int>(round(x) / m_tile_size);
+  int yTile = static_cast<int>(round(y) / m_tile_size);
 
   return get_value(xTile, yTile);
 }
@@ -92,6 +98,8 @@ Map::Space Map::get_value_direction(const Direction &direction, const int &xCoor
   case UP:
     return get_value(xCoord, yCoord - 1);
   }
+
+  return SPACE_EMPTY;
 }
 
 
@@ -104,7 +112,11 @@ void Map::create_wall_tiles() {
     for (int y = 0; y < m_height; y++) {
       if (m_map[x][y] == SPACE_WALL) {
         wall_from_neighbors(x, y, wall, rot);
-        m_wall_tiles.push_back(Tile(wall, x * m_tile_size, y * m_tile_size, rot));
+        m_wall_tiles.push_back( Tile(
+          wall,
+          x * m_tile_size,
+          y * m_tile_size,
+          static_cast<float>(rot)));
       }
     }
   }
@@ -130,6 +142,14 @@ bool Map::check_eating_food(const int & xCoord, const int & yCoord) {
   }
 
   return false;
+}
+
+int Map::width() const {
+  return m_width;
+}
+
+int Map::height() const {
+  return m_height;
 }
 
 int Map::food_count() const {
@@ -167,31 +187,31 @@ void Map::wall_from_neighbors(const int &x, const int &y, Wall &wall, int &rot) 
   case 1: {
     // Find the only wall neighbor
     auto it = std::find(neighborWalls.begin(), neighborWalls.end(), SPACE_WALL);
-    int index = std::distance(neighborWalls.begin(), it);
+    auto index = std::distance(neighborWalls.begin(), it);
 
     wall = WALL_END;
-    rot = index * 90;
+    rot = static_cast<int>(index * 90);
     break;
   }
   case 2: {
     // Find the 2 wall neighbors
     auto firstIt = std::find(neighborWalls.begin(), neighborWalls.end(), SPACE_WALL);
     auto secondIt = std::find(firstIt + 1, neighborWalls.end(), SPACE_WALL);
-    int firstIndex = std::distance(neighborWalls.begin(), firstIt);
-    int secondIndex = std::distance(neighborWalls.begin(), secondIt);
+    auto firstIndex = std::distance(neighborWalls.begin(), firstIt);
+    auto secondIndex = std::distance(neighborWalls.begin(), secondIt);
 
-    int diff = secondIndex - firstIndex;
+    int diff = static_cast<int>(secondIndex - firstIndex);
     wall = diff == 2 ? WALL_STRAIGHT : WALL_TURN;
-    rot = diff != 3 ? firstIndex * 90 : diff * 90;
+    rot = static_cast<int>(diff != 3 ? firstIndex * 90 : diff * 90);
     break;
   }
 
   case 3: {
     auto it = std::find(neighborWalls.begin(), neighborWalls.end(), SPACE_EMPTY);
-    int index = std::distance(neighborWalls.begin(), it);
+    auto index = std::distance(neighborWalls.begin(), it);
 
     wall = WALL_T;
-    rot = (index - 2) * 90;
+    rot = static_cast<int>((index - 2) * 90);
     break;
   }
   case 4:

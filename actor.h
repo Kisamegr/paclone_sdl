@@ -22,6 +22,9 @@ protected:
   std::vector<IImage*>	m_images;                // The animation images list
   Direction             m_input_direction;       // The direction the actor wants to move to
 
+  float                 m_initial_x;             // Holds the initial x pixel position
+  float                 m_initial_y;             // Holds the initial y pixel position
+
   // Updates the current frame being drawn
   virtual void update_animation(const float &dt) = 0;
 
@@ -39,6 +42,9 @@ public:
 
   // Draws the current frame
   virtual void draw(const float &x_offset, const float &y_offset);
+
+  // Resets the actor to its original state
+  virtual void reset();
 
   // Sets the actor's pixel position
   void setPosition(const float &x, const float &y);

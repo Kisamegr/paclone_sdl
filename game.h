@@ -29,6 +29,9 @@ class Game
   IFont *m_small_font;            // Used to render small text on screen!
   IFont *m_big_font;              // Used to render BIG text on screen!
 
+  // Resets the g_map data into the map and re-creates the tiles
+  void initialize_map();
+
 public:
 
   // Contructor 
@@ -46,5 +49,8 @@ public:
 
   // Called when a ghost catches the player
   void game_lost();
+
+  // Reset the map, actors and score
+  void reset_game();
 };
 
